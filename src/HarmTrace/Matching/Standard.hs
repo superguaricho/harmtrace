@@ -1,18 +1,20 @@
 
 module HarmTrace.Matching.Standard (diffChords, diffChordsLen) where
 
-import Data.Algorithm.Diff -- cabal install Diff
+import Data.Algorithm.Diff (Diff, PolyDiff(..), getDiff)
 
-diff :: (Eq a) => [a] -> [a] -> [(DI,a)]
+
+
+diff :: (Eq a) => [a] -> [a] -> [Diff a]
 diff = getDiff
 
 diffLen :: (Eq a) => [a] -> [a] -> Float
 diffLen x y = fromIntegral (len (diff x y)) / fromIntegral (length x)
 
-len :: [(DI,a)] -> Int
-len []        = 0
-len ((B,_):t) = len t
-len ((_,_):t) = 1 + len t
+len :: [Diff a] -> Int
+len []             = 0
+len ((Both _ _):t) = len t
+len ((_):t)        = 1 + len t
 
 --------------------------------------------------------------------------------
 -- Matching

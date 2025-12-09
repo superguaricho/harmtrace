@@ -14,7 +14,7 @@
 
 module Replace where
 
-import System.IO
+import System.IO hiding (hGetContents')
 import System.Process (readProcess)
 import Data.List (isPrefixOf)
 import HarmTrace.IO.Common (hGetContents')

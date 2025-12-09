@@ -3,7 +3,7 @@
 {-# LANGUAGE FlexibleInstances      #-}
 {-# LANGUAGE FlexibleContexts       #-}
 {-# LANGUAGE TypeFamilies           #-}
-{-# LANGUAGE OverlappingInstances   #-}
+
 {-# LANGUAGE ScopedTypeVariables    #-}
 
 --------------------------------------------------------------------------------
@@ -57,10 +57,10 @@ instance (ParseG a) => Parse' (Rec a) where
 instance (ParseG a) => Parse' (Var a) where
   parse' = Var <$> parseG
 
-instance (Constructor c, Parse' f) => Parse' (G.CEq c p p f) where
+instance {-# OVERLAPPING #-} (Constructor c, Parse' f) => Parse' (G.CEq c p p f) where
   parse' = G.C <$> parse' <?> "Constructor " ++ conName (undefined :: C c f)
 
-instance                              Parse' (G.CEq c p q f) where 
+instance {-# OVERLAPPABLE #-}          Parse' (G.CEq c p q f) where 
   parse' = empty
 
 instance (Parse' f, Parse' g) => Parse' (f :+: g) where

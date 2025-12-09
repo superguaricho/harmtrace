@@ -23,7 +23,7 @@ import Data.List (sort, groupBy)
 import Control.Arrow ((***))
 import System.FilePath
 import System.Directory
-import System.IO
+import System.IO hiding (hGetContents', readFile')
 import Text.Printf (printf)
 
 

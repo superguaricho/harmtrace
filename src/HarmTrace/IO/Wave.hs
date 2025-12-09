@@ -24,7 +24,7 @@ import Codec.Wav            ( importFile )
 import Data.Audio           ( Audio, sampleData, convert )
 
 -- hmatrix
-import Data.Packed.Vector   ( Vector, fromList )
+import Numeric.LinearAlgebra.Data   ( Vector, fromList )
 
 -- Other
 import Data.Array.Unboxed   ( elems )

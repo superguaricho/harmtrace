@@ -107,11 +107,11 @@ wbMatchF inDel a' b' = m where
   match i j = sim (a ! i) (b ! j)  
   -- this is the actual core recursive definintion of the algorithm
   fill 0 0 = max  (match 0 0) 0
-  fill 0 j = max0 (((m ! 0   ) !(j-1)) + inDel) (match 0 j) 
-  fill i 0 = max0 (((m !(i-1)) ! 0   ) + inDel) (match i 0)  
-  fill i j = max3 (((m !(i-1)) ! j   ) + inDel) 
-                  (((m !(i-1)) !(j-1)) + match i j) 
-                  (((m ! i)    !(j-1)) + inDel)
+  fill 0 j = max0 (((m ! 0   ) ! (j-1)) + inDel) (match 0 j) 
+  fill i 0 = max0 (((m ! (i-1)) ! 0   ) + inDel) (match i 0)  
+  fill i j = max3 (((m ! (i-1)) ! j   ) + inDel) 
+                  (((m ! (i-1)) ! (j-1)) + match i j) 
+                  (((m ! i)    ! (j-1)) + inDel)
   m = generate (length a) (generate (length b) . fill)
 
 
@@ -124,16 +124,16 @@ collectMatch a = fromList $ collect a (length a -1, length (head a) -1) []
 collect :: (Ord b, Num b) => Vector (Vector b) -> (Int, Int) -> [(Int, Int)] 
         -> [(Int, Int)]
 collect a c@(0,0) m = if (a!0)!0 > 0 then c : m else m
-collect a c@(i,0) m = if (a!i)!0 > (a!(i-1))! 0 
+collect a c@(i,0) m = if (a!i)!0 > (a! (i-1))! 0 
                                      then c : m else collect a (i-1,0) m
-collect a c@(0,j) m = if (a!0)!j > (a!0    )!(j-1) 
+collect a c@(0,j) m = if (a!0)!j > (a!0    )! (j-1) 
                                      then c : m else collect a (0,j-1) m
 collect a c@(i,j) m 
   | (a ! i) ! j > snd o = collect a (fst o) (c : m)
   | otherwise               = collect a (fst o) m where 
-      o = realMax3 ((i-1,j)  , (a !(i-1)) ! j   )
-                   ((i-1,j-1), (a !(i-1)) !(j-1))
-                   ((i,j-1)  , (a ! i   ) !(j-1))
+      o = realMax3 ((i-1,j)  , (a ! (i-1)) ! j   )
+                   ((i-1,j-1), (a ! (i-1)) ! (j-1))
+                   ((i,j-1)  , (a ! i   ) ! (j-1))
 
 realMax3 :: (Ord a) => (t, a) -> (t, a) -> (t, a) -> (t, a)    
 realMax3 w nw n = maxByWeight nw (maxByWeight w n) where

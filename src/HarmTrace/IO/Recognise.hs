@@ -33,13 +33,13 @@ import Constants ( keyStr, chromaStr, beatStr
 import HarmTrace.Base.MusicRep
 import HarmTrace.Models.Jazz.Instances ()
 import HarmTrace.Base.Parsing hiding ((<.>))
-import HarmTrace.Models.Models 
+ 
 
 -- Audio stuff
 import HarmTrace.Audio.DataParser ( parseChordinoData, parseChromaData
                                   , parseBarTimeData)
 import HarmTrace.Audio.AnnotationParser
-import HarmTrace.Audio.Annotate (putSegStats, mptreeAnnotator)
+import HarmTrace.Audio.Annotate (putSegStats)
 import HarmTrace.Audio.Evaluation ( relCorrectOverlap, achievScore, avgDistToOne
                                   , chordTriadEq, chordClassEq, majMinEq
                                   , printChordRCO, printRCO, chordChangeRatio )
@@ -486,13 +486,4 @@ expandPerBeat = concatMap expand where
   expand td = let ts = getTimeStamps td
               in zipWith3 timedDataBT (repeat . getData $ td) ts (tail ts)
 
---------------------------------------------------------------------------------
--- for testing in ghci
---------------------------------------------------------------------------------
 
-mptree :: FilePath -> IO [TimedData ProbChord]
-mptree f = do maf <- findAudioFeatures True f
-              case maf of
-                Nothing -> error ("invalid audiofeature file " ++ show f) 
-                Just af -> do readAudioFeatures af >>= 
-                                return . mptreeAnnotator (GrammarEx Pop) Nothing

@@ -1,0 +1,4 @@
+packages: ./HarmTrace.cabal ./instant-generics/instant-generics.cabal
+
+-- package hashable
+--   ghc-options: -optl-no-pie

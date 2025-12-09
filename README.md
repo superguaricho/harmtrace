@@ -39,22 +39,26 @@ _[ACM SIGPLAN Notices](http://dl.acm.org/citation.cfm?id=2034797&dl=ACM&coll=DL&
 
 # Installation
 
-Because the main authors of HarmTrace are are no longer affiliated with 
-academic institutions and HarmTrace is only modestly maintained, installing 
-Harmtrace can be a challenge. However, [Stack](
-https://docs.haskellstack.org/en/stable/README/) helps considerably. One of 
-the difficulties is that HarmTrace currently only build on a relatively old 
-version of GHC, namely 7.10. Provided that you have intalled a Haskell system 
-and pulled this repository, Stack should take care of it:
+This fork has been modified to compile with GHC 9.4.8 using Cabal. The original version was compatible with GHC 7.10 and used Stack.
 
-`stack build`
+The main changes are:
+
+*   Code adjustments to be compatible with GHC 9.4.8 and newer versions of dependencies like `hmatrix` and `Diff`.
+*   The `HarmTrace-Base` dependency has been integrated directly into the `src/` directory.
+*   The `instant-generics` dependency has been included as a local copy in the `instant-generics/` directory. This is necessary for compilation and points to a modified version of the library also available at `https://github.com/superguaricho/instant-generics`.
+
+To build the project, you can use `cabal`:
+
+```
+cabal build
+```
 
 # Running HarmTrace
 
-You can use Stack to run HarmTrace:
+You can use Cabal to run HarmTrace. Note the `--` separator which is needed to pass arguments to the executable itself.
 
 ```
->>> stack exec harmtrace
+>>> cabal run harmtrace -- --help
 harmtrace [COMMAND] ... [OPTIONS]
   Harmonic Analysis and Retrieval of Music
 
@@ -70,7 +74,7 @@ Commands:
 
 All modes have separate help pages:
 ```
->>> stack exec harmtrace parse -- --help
+>>> cabal run harmtrace -- parse --help
 parse [OPTIONS]
   Parse files into harmonic analysis trees
 
@@ -93,7 +97,7 @@ syntax](http://ismir2005.ismir.net/proceedings/1080.pdf) suffixed with a
 `;INT` indicating the duration of the chord and separated by spaces. The 
 first 'chord' represents a key signature. For instance:
 ```
->>> stack exec harmtrace parse -- --grammar=jazz --chords="C:maj D:min;1 G:7;2 C:maj;1"
+>>> cabal run harmtrace -- parse --grammar=jazz --chords="C:maj D:min;1 G:7;2 C:maj;1"
 parsed 3 chords into 1 analysis tree(s)
 [Piece[PD[D_1_1[S_1par_1[IIm_1[D:min]]][D_2_1[V7_2[G:7]]]]][PT[T_1_1[I_1[C:maj]]]]]
 ```
